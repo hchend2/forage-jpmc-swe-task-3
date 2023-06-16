@@ -4,6 +4,8 @@ import { ServerRespond } from './DataStreamer';
 import { DataManipulator } from './DataManipulator';
 import './Graph.css';
 
+import { TableData } from '@finos/perspective'; // to be verified ...
+
 interface IProps {
   data: ServerRespond[],
 }
@@ -11,6 +13,12 @@ interface IProps {
 interface PerspectiveViewerElement extends HTMLElement {
   load: (table: Table) => void,
 }
+
+// interface table_data extends HTMLElement {
+//   load: (tableData: TableData) => void,
+// }
+
+
 class Graph extends Component<IProps, {}> {
   table: Table | undefined;
 
@@ -23,10 +31,16 @@ class Graph extends Component<IProps, {}> {
     const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
 
     const schema = {
-      stock: 'string',
-      top_ask_price: 'float',
-      top_bid_price: 'float',
+      price_abc: 'float',
+      price_def: 'float',
+      ration: 'float',
+      // stock: 'string',
+      // top_ask_price: 'float',
+      // top_bid_price: 'float',
       timestamp: 'date',
+      upper_bound: 'float',
+      lower_bound: 'float',
+      trigger_allert: 'float',
     };
 
     if (window.perspective && window.perspective.worker()) {
@@ -35,24 +49,29 @@ class Graph extends Component<IProps, {}> {
     if (this.table) {
       // Load the `table` in the `<perspective-viewer>` DOM reference.
       elem.load(this.table);
+
       elem.setAttribute('view', 'y_line');
-      elem.setAttribute('column-pivots', '["stock"]');
       elem.setAttribute('row-pivots', '["timestamp"]');
-      elem.setAttribute('columns', '["top_ask_price"]');
+      // elem.setAttribute('column-pivots', '["stock"]');
+      elem.setAttribute('columns', '["ration", "lower_bound", "upper_bound", "trigger_alert"]');
       elem.setAttribute('aggregates', JSON.stringify({
-        stock: 'distinctcount',
-        top_ask_price: 'avg',
-        top_bid_price: 'avg',
+        // stock: 'distinctcount',
+        price_abc: 'avg',
+        price_def: 'avg',
+        ration: 'avg',
         timestamp: 'distinct count',
+        upper_bound: 'avg',
+        lower_bound: 'avg',
+        trigger_alert: 'avg',
       }));
     }
   }
 
   componentDidUpdate() {
     if (this.table) {
-      this.table.update(
+      this.table.update([
         DataManipulator.generateRow(this.props.data),
-      );
+      ] as unknown as TableData);
     }
   }
 }
