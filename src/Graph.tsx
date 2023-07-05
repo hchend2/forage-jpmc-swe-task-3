@@ -14,7 +14,7 @@ interface PerspectiveViewerElement extends HTMLElement {
   load: (table: Table) => void,
 }
 
-// interface table_data extends HTMLElement {
+// interface PerspectiveViewerElement extends HTMLElement {
 //   load: (tableData: TableData) => void,
 // }
 
