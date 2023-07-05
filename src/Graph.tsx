@@ -4,7 +4,7 @@ import { ServerRespond } from './DataStreamer';
 import { DataManipulator } from './DataManipulator';
 import './Graph.css';
 
-import { TableData } from '@finos/perspective'; // to be verified ...
+import { TableData } from '@finos/perspective';
 
 interface IProps {
   data: ServerRespond[],
@@ -17,7 +17,6 @@ interface PerspectiveViewerElement extends HTMLElement {
 // interface PerspectiveViewerElement extends HTMLElement {
 //   load: (tableData: TableData) => void,
 // }
-
 
 class Graph extends Component<IProps, {}> {
   table: Table | undefined;
